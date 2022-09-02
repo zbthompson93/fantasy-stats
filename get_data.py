@@ -9,25 +9,29 @@ text = r.text
 # f.write(text)
 # f.close()
 
+# Initialize list for player stats
 players = []
 
+# Create soup object
 soup = BeautifulSoup(text, features="html.parser")
 #print(soup)
 
+'''Get the data from the name table'''
+# Get name table
 nameTable = soup.find('table', class_='Table Table--align-right Table--fixed Table--fixed-left')
 
+# Get table header
 nameHeader = nameTable.find('thead').string
-#print(nameHeader)
 
+# Get player names and add to players list as an object
 names = nameTable.find_all('a', class_='AnchorLink')
 for name in names:
     obj = {'name': name.text}
     players.append(obj)
     #print(name.text)
 
+# Get player positions and update players list
 pos = nameTable.find_all('span', class_='font10')
-#print(pos)
-
 for count, position in enumerate(pos):
     obj = players[count]
     obj.update({"position": position.contents[2]})
