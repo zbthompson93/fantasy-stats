@@ -1,17 +1,16 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import pandas as pd
 
 # List of teams
 teams = ['atl', 'bos', 'bkn', 'cha', 'chi', 'cle', 'dal', 'den', 'det', 'gs', 'hou', 'ind', 'lac', 'lal', 'mem', 'mia', 'mil', 'min', 'no', 'ny', 'okc', 'orl', 'pho', 'phi', 'por', 'sac', 'sa', 'tor', 'utah', 'was']
-
-print(len(teams))
 
 data = []
 
 for team in teams:
     url = 'https://www.espn.com/nba/team/stats/_/name/{0}'.format(team)
-    print(team)
+    #print(team)
     r = requests.get(url)
     text = r.text
 
@@ -76,5 +75,13 @@ for team in teams:
 with open('data.json', 'w') as f:
     json.dump(data, f)
 
+print(len(data))
+
+ 
+df = pd.DataFrame.from_dict(data)
+
+group = df.groupby('position')
+
+print(group)
 
 print("Done")
