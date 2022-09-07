@@ -2,6 +2,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
+# List of teams
 teams = ['atl', 'bos', 'bkn', 'cha', 'chi', 'cle', 'dal', 'den', 'det', 'gs', 'hou', 'ind', 'lac', 'lal', 'mem', 'mia', 'mil', 'min', 'no', 'ny', 'okc', 'orl', 'pho', 'phi', 'por', 'sac', 'sa', 'tor', 'utah', 'was']
 
 print(len(teams))
@@ -16,13 +17,10 @@ for team in teams:
 
     # Create soup object
     soup = BeautifulSoup(text, features="html.parser")
-    #print(soup)
 
     # Initialize list for player stats
     players = []
 
-
-    '''Get the data from the name table'''
     # Get name table
     nameTable = soup.find('table', class_='Table Table--align-right Table--fixed Table--fixed-left')
 
@@ -64,14 +62,17 @@ for team in teams:
         #Add stats headers as keys and the stats from the rows var to each player object
         for count2, stats in enumerate(statsName):
             stat = row[count2].string
-            obj.update({stats.string: stat})
+            statsStr = ""
+            if stats.string == None:
+                statsStr = "PTS"
+            else:
+                statsStr = stats.string
+            obj.update({statsStr: stat})
 
     data = data + players
 
 
-#print(players[9])
-
-
+# Write data to JSON file
 with open('data.json', 'w') as f:
     json.dump(data, f)
 
