@@ -75,13 +75,20 @@ for team in teams:
 with open('data.json', 'w') as f:
     json.dump(data, f)
 
-print(len(data))
-
  
 df = pd.DataFrame.from_dict(data)
 
-group = df.groupby('position')
+df.PER = df.PER.astype(float)
 
-print(group)
+sort = df.sort_values(by='PER', ascending=False)
+
+#print(sort)
+
+sort.to_csv('data.csv')
+
+group = sort.groupby('position')
+
+for key, item in group:
+    print(group.get_group(key), "\n\n")
 
 print("Done")
